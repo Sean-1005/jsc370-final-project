@@ -1,0 +1,7 @@
+"0","summary_com <- data %>%"
+"0","  filter(title == ""Data Scientist"") %>% "
+"0","  group_by(company) %>% "
+"0","  summarise(count = n(),"
+"0","            mean_salary = mean(totalyearlycompensation),"
+"0","            mean_exp = mean(yearsofexperience),"
+"0","            mean_com = mean(yearsatcompany))"

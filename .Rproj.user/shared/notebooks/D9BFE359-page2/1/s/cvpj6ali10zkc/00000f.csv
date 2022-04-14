@@ -1,0 +1,11 @@
+"0","p3_lines <- summary_exp %>%
+  plot_ly(x = ~yearsofexperience,
+          y = ~mean_salary,
+          color = ~company,
+          type = ""scatter"",
+          mode = ""lines"",
+          name = company)
+"
+"2","Error in plot_ly(., x = ~yearsofexperience, y = ~mean_salary, color = ~company,  : 
+  object 'company' not found
+"

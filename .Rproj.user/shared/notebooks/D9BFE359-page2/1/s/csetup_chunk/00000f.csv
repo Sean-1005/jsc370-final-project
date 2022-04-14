@@ -1,0 +1,6 @@
+"0","library(dplyr)"
+"0","library(janitor)"
+"0","library(plotly)"
+"0",""
+"0","data <- read.csv(""./Levels_Fyi_Salary_Data.csv"")"
+"0","data <- data %>%  clean_names()"

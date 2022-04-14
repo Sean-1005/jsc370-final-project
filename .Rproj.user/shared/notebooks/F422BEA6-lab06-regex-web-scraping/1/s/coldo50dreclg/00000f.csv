@@ -1,0 +1,22 @@
+"0","library(httr)"
+"2","
+Attaching package: ‘httr’
+
+"
+"2","The following object is masked from ‘package:plotly’:
+
+    config
+
+"
+"0","library(stringr)"
+"0","query_ids <- GET("
+"0","  url   = ""https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"","
+"0","  query = list("
+"0","    db= 'pubmed',"
+"0","    term = 'covid19 canada',"
+"0","    retmax = 1000"
+"0","  )"
+"0",")"
+"0",""
+"0","# Extracting the content of the response of GET"
+"0","ids <- httr::content(query_ids)"

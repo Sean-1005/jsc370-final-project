@@ -1,0 +1,7 @@
+"0","summary_exp <- data %>% "
+"0","  filter(title== ""Data Scientist"") %>% "
+"0","  group_by(company, yearsofexperience) %>% "
+"0","  summarise(count = n(),"
+"0","            mean_salary = mean(totalyearlycompensation))"
+"1","`summarise()` has grouped output by 'company'. You can override using the `.groups` argument.
+"

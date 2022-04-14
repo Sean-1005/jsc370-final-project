@@ -1,0 +1,6 @@
+"0","# Read in the text of Pride and Prejudice and remove the the front matter and end matter"
+"0","pap <- "
+"0","  readLines(""https://www.gutenberg.org/files/1342/1342-0.txt"", encoding = ""UTF-8"")[168:14227]"
+"0",""
+"0","# Extract all the punctuation in the text using regular expression"
+"0","punctuations <- stringr::str_extract_all(pap, ""[[:punct:]]{1}"", simplify=TRUE)"

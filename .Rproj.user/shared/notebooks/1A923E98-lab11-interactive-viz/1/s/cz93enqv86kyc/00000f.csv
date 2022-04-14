@@ -1,0 +1,6 @@
+"0",""
+"0","p2 <- ggplot(cv_states,"
+"0","       aes(x = date, y = new_deaths, colour = state)) + "
+"0","  geom_line()"
+"0",""
+"0","ggplotly(p2)"

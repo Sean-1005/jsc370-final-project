@@ -1,0 +1,57 @@
+---
+title: "JSC370 Final Project"
+author: "Rui Miao"
+output: 
+    html_document:
+        toc: TRUE
+        toc_float: TRUE
+---
+
+# A. Introduction
+
+There are many different factors that affects the salary level of
+employers working in a company, such as degree, experience, number of
+years working in the company, gender, and so on. In this research, we
+are interested in the factors affecting the salary level of Data
+Scientists. According to a journal Research administrator salary:
+association with education, experience, credentials, and gender[1], we
+expect a positive relationship between experience and salary level, and
+male tends to have a higher salary than female.
+
+## a. Purpose of the Research:
+
+The purpose of the research comes from the fact that as statistics
+students, we are curious about careers related and their prospects. This
+will provide us with some insights into my future career path and what
+to expect.
+
+The importance of the research is that most third-year students are
+preparing to find an internship in the near future. And salary level is
+one of the most essential factors that we will consider to select a job.
+Thus, we are interested in studying the factors which may affect the
+salary level.
+
+## b. Research Question:
+
+**How does salary relate to years of experience, years at the company,
+and gender?**
+
+We are interested in this specific research question since answering
+this question can give us a preliminary understanding of our possible
+future development working in a company. Besides, we are also interested
+in whether there is gender discrimination when it comes to the salaries
+of male data scientists and female data scientists.
+
+Our goal for this research is to build a statistical model which is best
+for explaining the relationship between salary, and other possible
+predictors. And we may use our model to predict the salary that we may
+receive in out future career.
+
+## c. Background of the Dataset
+
+This dataset[2] is found on the website *Kaggle* containing salary
+records from top companies. There are in total 62642 observations and 29
+variables in our original dataset. We are interested in the question
+*How does salary relate to years of experience, years at the company,
+and gender?*. Thus, the variables that we are interested in are
+*salary*, *yearatcompany*, *yearsofexperience* and *gender*.
