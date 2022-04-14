@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Rui Miao" />
+
+<meta name="date" content="2022-04-14" />
+
+<title>JSC370 Final Project</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">JSC370 Final Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="JSC370_midterm_report.html">Report</a>
+</li>
+<li>
+  <a href="page2.html">Interactive Visulization</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JSC370/jsc370-2022/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://jsc370.github.io/jsc370-2022/">JSC370 Home</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">JSC370 Final Project</h1>
+<h4 class="author">Rui Miao</h4>
+<h4 class="date">2022-04-14</h4>
+
+</div>
+
+
+<div id="a.-introduction" class="section level1">
+<h1>A. Introduction</h1>
+<p>There are many different factors that affects the salary level of
+employers working in a company, such as degree, experience, number of
+years working in the company, gender, and so on. In this research, we
+are interested in the factors affecting the salary level of Data
+Scientists. According to a journal Research administrator salary:
+association with education, experience, credentials, and gender[1], we
+expect a positive relationship between experience and salary level, and
+male tends to have a higher salary than female.</p>
+<div id="a.-purpose-of-the-research" class="section level2">
+<h2>a. Purpose of the Research:</h2>
+<p>The purpose of the research comes from the fact that as statistics
+students, we are curious about careers related and their prospects. This
+will provide us with some insights into my future career path and what
+to expect.</p>
+<p>The importance of the research is that most third-year students are
+preparing to find an internship in the near future. And salary level is
+one of the most essential factors that we will consider to select a job.
+Thus, we are interested in studying the factors which may affect the
+salary level.</p>
+</div>
+<div id="b.-research-question" class="section level2">
+<h2>b. Research Question:</h2>
+<p><strong>How does salary relate to years of experience, years at the
+company, and gender?</strong></p>
+<p>We are interested in this specific research question since answering
+this question can give us a preliminary understanding of our possible
+future development working in a company. Besides, we are also interested
+in whether there is gender discrimination when it comes to the salaries
+of male data scientists and female data scientists.</p>
+<p>Our goal for this research is to build a statistical model which is
+best for explaining the relationship between salary, and other possible
+predictors. And we may use our model to predict the salary that we may
+receive in out future career.</p>
+</div>
+<div id="c.-background-of-the-dataset" class="section level2">
+<h2>c. Background of the Dataset</h2>
+<p>This dataset[2] is found on the website <em>Kaggle</em> containing
+salary records from top companies. There are in total 62642 observations
+and 29 variables in our original dataset. We are interested in the
+question <em>How does salary relate to years of experience, years at the
+company, and gender?</em>. Thus, the variables that we are interested in
+are <em>salary</em>, <em>yearatcompany</em>, <em>yearsofexperience</em>
+and <em>gender</em>.</p>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="b.-methods" class="section level1">
+<h1>B. Methods</h1>
+<div id="a.-how-and-when-the-data-was-acquired" class="section level2">
+<h2>a. How and When the data was acquired</h2>
+<p>The data was scraped off levels.fyi and then cleaned by the author.
+The license[3] of this data set is including in the <em>Reference</em>
+section. According to the terms and conditions of the website, people
+may use the data for personal, non-commercial purposes (mentioned in the
+last sentence in the “License” section).</p>
+</div>
+<div id="b.-cleaning-and-wrangling-the-data" class="section level2">
+<h2>b. Cleaning and Wrangling the Data</h2>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(psych) </code></pre>
+<pre class="r"><code>Levels_Fyi_Salary_Data &lt;- 
+  read.csv(file=&quot;Levels_Fyi_Salary_Data.csv&quot;, header=T)
+
+datascience &lt;- Levels_Fyi_Salary_Data %&gt;%
+  filter(title == &quot;Data Scientist&quot;)
+
+datascience &lt;- datascience %&gt;%
+  drop_na(gender)
+datascience &lt;- datascience[!(datascience$gender==&quot;Other&quot;),]
+
+datascience &lt;-
+  datascience %&gt;% 
+  select(totalyearlycompensation, yearsofexperience, yearsatcompany, gender)</code></pre>
+<p>There are in total 62642 observations and 29 variables in our
+original dataset. After filtering out unrelated titles and leaving only
+observations with Data Scientist as title, observations with missing
+values in gender and “Other” in gender are also filtered out. As one of
+the purposes of our analysis is to explore whether there is gender
+discrimination in salaries. The size of the dataset shrinks to 1718
+observations. We are only interested in exploring 4 of the 29 variables
+including <em>salary</em>, <em>yearatcompany</em>,
+<em>yearsofexperience</em> and <em>gender</em>.</p>
+<ul>
+<li><p><strong>title</strong>: A categorical variable representing the
+job title of an individual in his/her company. Since we are interested
+in the titles related to our future careers, “title” can give us
+information about specific titles that we are interested in.</p></li>
+<li><p><strong>totalyearlycompensation</strong>: A numerical variable
+representing the total annual compensation of an individual with title
+in his/her company. According to our research question, this is our
+response variable. It will be denoted as salary in the following
+analysis for simplicity.</p></li>
+<li><p><strong>yearatcompany</strong>: A numerical variable representing
+the number of years that an individual has worked in his/her company.
+According to our research question, this is one of our
+predictors.</p></li>
+<li><p><strong>yearsofexperience</strong>: A numerical variable
+representing the number of years of an individual’s working experience.
+According to our research question, this is one of our predictors.
+gender: A categorical variable representing the gender of an individual.
+According to our research question, this is one of our predictors.</p>
+<div style="page-break-after: always;"></div></li>
+</ul>
+<pre class="r"><code>describe(datascience)</code></pre>
+<pre><code>##                         vars    n      mean        sd    median   trimmed
+## totalyearlycompensation    1 1718 199576.83 106445.38 182500.00 187973.84
+## yearsofexperience          2 1718      4.90      4.09      4.00      4.37
+## yearsatcompany             3 1718      1.99      2.21      1.75      1.62
+## gender*                    4 1718      1.79      0.41      2.00      1.86
+##                              mad   min    max  range  skew kurtosis      se
+## totalyearlycompensation 77836.50 10000 900000 890000  1.57     4.44 2568.12
+## yearsofexperience           2.97     0     30     30  1.58     3.63    0.10
+## yearsatcompany              1.85     0     19     19  2.35     8.57    0.05
+## gender*                     0.00     1      2      1 -1.42     0.02    0.01</code></pre>
+<p>As shown, total yearly compensation ranges from 10000 to 900000 which
+is a large interval. And we noticed that the median is slightly lower
+than the mean, implying that the distribution of salary might be
+left-skewed. And the table illustrates that the variance of salary is
+much larger than the variances of our predictors, which coincides with
+our large-interval finding of salary in Table 1.</p>
+<p>Also the mean of year of experience is longer than the mean of year
+at company, which may indicates that employees usually have worked in
+different companies. And according to the values of <em>skew</em>, we
+noticed that all of the three numeric variables are right-skewed in
+different level.</p>
+<pre class="r"><code>datascience %&gt;% 
+  ggplot(aes(totalyearlycompensation)) + 
+  geom_histogram(bins = 40, fill = &quot;#F5B7B1&quot;, color = &quot;#EC7063&quot;) +
+  theme_minimal() +
+  labs(title = &quot;total year compensation&quot;, 
+       caption = &quot;Fig. 1 Created by Rui Miao in JSC370, Winter 2022&quot;)</code></pre>
+<p><img src="JSC370_midterm_report_files/figure-html/Distrbutions%20of%20interested%20Variables-1.png" width="672" /></p>
+<pre class="r"><code>datascience %&gt;% 
+  ggplot(aes(yearsatcompany)) + 
+  geom_histogram(bins = 40, fill = &quot;#FFDB6D&quot;, color = &quot;#C4961A&quot;) +
+  theme_minimal() +
+  labs(title = &quot;year at company&quot;, 
+       caption = &quot;Fig. 2 Created by Rui Miao in JSC370, Winter 2022&quot;)</code></pre>
+<p><img src="JSC370_midterm_report_files/figure-html/Distrbutions%20of%20interested%20Variables-2.png" width="672" /></p>
+<pre class="r"><code>datascience %&gt;% 
+  ggplot(aes(yearsofexperience)) + 
+  geom_histogram(bins = 40, fill = &quot;#ABEBC6&quot;, color = &quot;#58D68D&quot;) +
+  theme_minimal() +
+  labs(title = &quot;year of experience&quot;, 
+       caption = &quot;Fig. 3 Created by Rui Miao in JSC370, Winter 2022&quot;)</code></pre>
+<p><img src="JSC370_midterm_report_files/figure-html/Distrbutions%20of%20interested%20Variables-3.png" width="672" /></p>
+<pre class="r"><code>datascience %&gt;% 
+  ggplot(aes(gender)) + 
+  geom_bar(fill = c(&quot;#A3E4D7&quot;, &quot;#FADBD8&quot;), color = c(&quot;#48C9B0&quot;, &quot;#F1948A&quot;)) +
+  theme_minimal() +
+  labs(title = &quot;gender&quot;, 
+       caption = &quot;Fig. 4 Created by Rui Miao in JSC370, Winter 2022&quot;)</code></pre>
+<p><img src="JSC370_midterm_report_files/figure-html/Distrbutions%20of%20interested%20Variables-4.png" width="672" /></p>
+<p>Figure 1 showing the distribution of salary indicates a left-skewed
+trend with some outliers on the right, which have salaries over
+5<em>105dollars per year. Most values concentrate in the interval
+between 10000 and 4</em>105. There are 35 observations that have a
+salary above 5*105. Since they are likely to affect the result of our
+linear model, we may remove them when fitting a linear model.</p>
+<p>Figure 2 (years of experience) and Figure 3 (years at company)
+display a similar trend as Figure 1 (salary). They are even more
+left-skewed than salary and have a few outliers as well, for instance,
+the 41 people with more than 15 years of experience and the 44 people
+with more than 7 years at the same company.</p>
+<p>Figure 4 (gender) illustrates a strong gender imbalance. There are
+fewer than 400 female data scientists and more than 1200 male data
+scientists in our dataset.</p>
+<p>From the figures shown, we can see that our continuous predictors
+including years of experience and years at the company have similar
+distribution as our response variable, which justifies the use of linear
+regression in the analysis.</p>
+<pre class="r"><code>datascience$genders &lt;-1
+datascience$genders[datascience$gender==&quot;Male&quot;] &lt;- 0
+datascience$genders[datascience$gender==&quot;Female&quot;] &lt;- 1</code></pre>
+<p>We mutated the gender to a numeric values, where male is 0, and
+female is 1 so that we could interpret the gender data more easily.</p>
+</div>
+<div id="c.-analyze-the-data" class="section level2">
+<h2>c. Analyze the data</h2>
+<pre class="r"><code>model &lt;-
+  lm(datascience$totalyearlycompensation ~
+       datascience$yearsatcompany+
+       datascience$yearsofexperience+
+       datascience$gender)</code></pre>
+<p>My research question can be answered using a <strong>linear
+regression</strong> model because we expect that there exists a linear
+relationship between our predictors and responses. And each row of our
+data represents an independent individual, which indicates that each row
+in our dataset should be independent to one another.</p>
+<p>I will be using <strong>total yearly compensation (Y)</strong> as my
+response and use the predictors <strong>years of experience
+(</strong><span class="math inline">\(X_1\)</span><strong>)</strong>,
+<strong>years at the company (</strong><span
+class="math inline">\(X_2\)</span><strong>)</strong>, <strong>gender
+(</strong><span class="math inline">\(X_3\)</span><strong>)</strong>
+because we are interested in the annual salary level which is total
+yearly compensation, and we would like to see how years of experience,
+years at company and gender affect the total yearly compensation.</p>
+<p>Some anticipated issues might be that the outliers have some impact
+when estimating the coefficients of our model and need to be removed.
+Another issue is that two of our predictor variables, years of
+experience and years at the company might be correlated to each other in
+a way that years of experience = years at the company + years at other
+companies. In fact, there are 543 individuals whose years of experience
+are exactly equal to their years at the company. The correlation between
+our predictor variables will make our prediction less accurate.</p>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="c.-result" class="section level1">
+<h1>C. Result</h1>
+<pre class="r"><code>plot(datascience$totalyearlycompensation 
+     ~ fitted(model), 
+     main=&quot;Y versus Y-hat&quot;, 
+     xlab=&quot;Y-hat&quot;, ylab=&quot;Y&quot;)
+
+abline(a = 0, b = 1)
+lines(lowess(datascience$totalyearlycompensation ~ fitted(model)), lty=2)</code></pre>
+<p><img src="JSC370_midterm_report_files/figure-html/Response%20versus%20fitted%20values-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>The plot above showing the relationship between the response Y and
+the fitted values of Y. By observing the plot of response against the
+fitted values, we see that there is a non-random scatter around the
+identity function, indicating that there is not a simple function of a
+linear combination of predictors. And most of the points in the graph
+are having a positive values. Thus, conditional means response is not a
+perfect single function of a linear combination of the predictors.</p>
+<pre class="r"><code>pairs(datascience[,1:3])</code></pre>
+<p><img src="JSC370_midterm_report_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Based on this plot, we noticed that there is some patterns between
+each pairs of variables. Most of the plots have points concentrating at
+the lower left and moving upward to the upper-right corner. Therefore,
+most of the associations between each possible pairs of the association
+is positive. Only the scatter plot for total yearly compensation and
+years at company seems to have an unclear association. Above this, we
+can conclude that conditional mean of each predictor has a linear
+function with another predictor.</p>
+<pre class="r"><code># make all residual plots
+r &lt;- resid(model)
+
+par(mfrow=c(2,2))
+plot(r ~ fitted(model), 
+     main=&quot;Fitted&quot;, 
+     xlab=&quot;Fitted&quot;, ylab=&quot;res.&quot;)
+
+plot(r ~ datascience$yearsofexperience, 
+     main=&quot;YearOfExperience&quot;, 
+     xlab=&quot;YearOfExperience&quot;, ylab=&quot;res&quot;)
+
+plot(r ~ datascience$yearsatcompany, 
+     main=&quot;YearOfCompany&quot;, 
+     xlab=&quot;YearOfCompany&quot;, ylab=&quot;res&quot;)
+
+plot(r ~ datascience$genders, 
+     main=&quot;Gender&quot;, 
+     xlab=&quot;Gender&quot;, ylab=&quot;res&quot;)</code></pre>
+<p><img src="JSC370_midterm_report_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>We recognized that the scatters does not spread randomly and equally.
+But we noticed that all the points are more equally distributed at both
+side of 0,. This implies that <strong>assumptions 1</strong> is likely
+satisfied, which is the population errors have mean zero. However,
+assumption 2, 3 still do not hold perfectly, which are the population
+responses (equivalently errors) are somhow correlated with each other,
+and the population errors (equivalently responses) do not have constant
+spread/variance around conditional mean.</p>
+<pre class="r"><code>qqnorm(r)
+qqline(r)</code></pre>
+<p><img src="JSC370_midterm_report_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>By the normal QQ-plot, there is a straight diagonal string of points
+along an identity function, with some deviation on both ends. This shows
+that there is a <strong>normality</strong>, the populations errors are
+normally distributed with the mean of assumption 1.</p>
+<pre class="r"><code>summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = datascience$totalyearlycompensation ~ datascience$yearsatcompany + 
+##     datascience$yearsofexperience + datascience$gender)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -283202  -60331  -12036   42627  624604 
+## 
+## Coefficients:
+##                               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                   152378.2     5870.0  25.959  &lt; 2e-16 ***
+## datascience$yearsatcompany     -4525.7     1241.3  -3.646 0.000274 ***
+## datascience$yearsofexperience  10520.0      673.2  15.627  &lt; 2e-16 ***
+## datascience$genderMale          5828.6     5876.8   0.992 0.321435    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 99020 on 1714 degrees of freedom
+## Multiple R-squared:  0.1362, Adjusted R-squared:  0.1347 
+## F-statistic: 90.06 on 3 and 1714 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>This is the summary table of our model. Based on the p-values in the
+table, we noticed that the p-values for <strong>year of
+experience</strong> and <strong>year at company</strong> are extremely
+small, which indicates that these two are two main factors of the salary
+level.</p>
+</div>
+<div id="d.-conclusion-and-summary" class="section level1">
+<h1>D. Conclusion and Summary</h1>
+<p>The most significant factors that would affect salary are years
+working at company, years of experience, Gender.</p>
+<p>The relationships between response and each predictors are as
+follow:</p>
+<ul>
+<li><p>years working at company: negative</p></li>
+<li><p>years of experience: positive</p></li>
+<li><p>genders: positive</p></li>
+</ul>
+<p>According to the above relationships, we are not surprising to see
+that if you are more experienced, you will earn more.</p>
+<p>However, there are some interesting facts that for people works
+longer in a company, they will earn less. This could be caused by some
+extremely outliers in the dataset. Usually, employees will at least stay
+at the same salary level through out the duration of working at the
+companies.</p>
+<p>Another funny fact is that female earns more than males. Because from
+many facts of gender inequality in reality, females earn less than males
+at the same positions, with same degree. I think this may show an
+improvement in the gender equality nowadays. Another reason may be the
+percentage of female in this dataset is much smaller than male, thus,
+the data of female in this dataset is less representative. However, I
+would like to believe that we have a more open, less descrimination
+working environment for female than in the past.</p>
+<p>Overall, only according to the result, experience is the most
+important factors to earn more. And generally, females earns more than
+males when working as a datascientists.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="f.-reference" class="section level1">
+<h1>F. Reference</h1>
+<p>[1] Shambrook, Jennifer, et al. <em>“Research administrator salary:
+association with education, experience, credentials, and gender.”</em>
+Journal of Research Administration, vol. 42, no. 2, fall 2011, pp. 87+.
+Gale In Context: Canada,</p>
+<p><a
+href="https://go.gale.com/ps/i.dop=CICu=utorontomainid=GALEA276807849v=2.1it=rsid=bookmark-CICasid=809af152"
+class="uri"><em>https://go.gale.com/ps/i.dop=CICu=utorontomainid=GALEA276807849v=2.1it=rsid=bookmark-CICasid=809af152</em></a><em>.</em></p>
+<p>[2] “Data Science and STEM Salaries”, Kaggle.com, 2021. [Online].</p>
+<p>Available: <a
+href="https://www.kaggle.com/jackogozaly/data-science-and-stem-salaries"
+class="uri"><em>https://www.kaggle.com/jackogozaly/data-science-and-stem-salaries</em></a><em>.</em></p>
+<p>[3] License: According to the terms and conditions of the website,
+people may use the data for personal, non-commercial purposes (mentioned
+in the last sentence in the “License” section). This is the link to the
+page of terms and conditions of level.fyi:</p>
+<p><a href="https://www.levels.fyi/about/terms.html"
+class="uri"><em>https://www.levels.fyi/about/terms.html</em></a></p>
+</div>
+
+<p>Copyright &copy; 2022, Rui Miao.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
