@@ -12,6 +12,8 @@ navbar:
       href: https://github.com/Sean-1005/jsc370-final-project
     - text: "My JSC370 GitHub repo"
       href: https://github.com/Sean-1005/jsc370-final-project
+    - text: Download the PDF version
+      href: https://github.com/Sean-1005/jsc370-project/raw/main/final-report.pdf
 output:
   html_document:
     theme: cosmo
