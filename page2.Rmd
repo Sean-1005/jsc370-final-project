@@ -23,9 +23,42 @@ data <- read.csv("./Levels_Fyi_Salary_Data.csv")
 data <- data %>%  clean_names()
 ``` 
 
+```{r}
+intersted_com <- c("Adobe",
+                  "airbnb",
+                  "Alibaba",
+                  "Amazon",
+                  "Apple",
+                  "Booz Allen Hamilton",
+                  "Capital One",
+                  "Facebook",
+                  "FedEx",
+                  "Google",
+                  "Grammarly",
+                  "GitHub",
+                  "Glassdoor",
+                  "IBM",
+                  "Intel",
+                  "JPMorgan Chase",
+                  "LinkedIn",
+                  "Lyft",
+                  "Uber",
+                  "Microsoft",
+                  "Netflix",
+                  "Oracle",
+                  "Paypal",
+                  "NVIDIA",
+                  "RBC",
+                  "Walmart Lab",
+                  "Zoom")
+```
+
+
 ```{r include=FALSE}
+
 summary_com <- data %>%
   filter(title == "Data Scientist") %>% 
+  filter(company %in% intersted_com) %>% 
   group_by(company) %>% 
   summarise(count = n(),
             mean_salary = mean(totalyearlycompensation),
@@ -36,6 +69,7 @@ summary_com <- data %>%
 ```{r include=FALSE}
 summary_exp <- data %>% 
   filter(title== "Data Scientist") %>% 
+  filter(company %in% intersted_com) %>% 
   group_by(company, yearsofexperience) %>% 
   summarise(count = n(),
             mean_salary = mean(totalyearlycompensation))
