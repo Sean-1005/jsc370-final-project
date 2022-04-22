@@ -78,6 +78,7 @@ summary_exp <- data %>%
 ```{r include=FALSE}
 summary_yr_com <- data %>% 
   filter(title== "Data Scientist") %>% 
+  filter(company %in% intersted_com) %>% 
   group_by(company, yearsatcompany) %>% 
   summarise(count = n(),
             mean_salary = mean(totalyearlycompensation))
