@@ -31,9 +31,6 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -226,69 +223,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -296,16 +230,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -331,13 +255,13 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/JSC370/jsc370-2022/">
+  <a href="https://github.com/Sean-1005/jsc370-final-project">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://jsc370.github.io/jsc370-2022/">JSC370 Home</a>
+  <a href="https://github.com/Sean-1005/jsc370-final-project">My JSC370 GitHub repo</a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -415,32 +339,19 @@ last sentence in the “License” section).</p>
 </div>
 <div id="b.-cleaning-and-wrangling-the-data" class="section level2">
 <h2>b. Cleaning and Wrangling the Data</h2>
-<pre class="r"><code>library(ggplot2)
-library(dplyr)
-library(tidyverse)
-library(psych) </code></pre>
-<pre class="r"><code>Levels_Fyi_Salary_Data &lt;- 
-  read.csv(file=&quot;Levels_Fyi_Salary_Data.csv&quot;, header=T)
-
-datascience &lt;- Levels_Fyi_Salary_Data %&gt;%
-  filter(title == &quot;Data Scientist&quot;)
-
-datascience &lt;- datascience %&gt;%
-  drop_na(gender)
-datascience &lt;- datascience[!(datascience$gender==&quot;Other&quot;),]
-
-datascience &lt;-
-  datascience %&gt;% 
-  select(totalyearlycompensation, yearsofexperience, yearsatcompany, gender)</code></pre>
 <p>There are in total 62642 observations and 29 variables in our
 original dataset. After filtering out unrelated titles and leaving only
 observations with Data Scientist as title, observations with missing
 values in gender and “Other” in gender are also filtered out. As one of
 the purposes of our analysis is to explore whether there is gender
 discrimination in salaries. The size of the dataset shrinks to 1718
-observations. We are only interested in exploring 4 of the 29 variables
+observations. We are only interested in exploring 12 of the 29 variables
 including <em>salary</em>, <em>yearatcompany</em>,
-<em>yearsofexperience</em> and <em>gender</em>.</p>
+<em>yearsofexperience</em> <em>gender, Bachelors_Degree, Masters_Degree,
+Doctorate_Degree, Some_College, Highschool, Race_Asian, Race_White,</em>
+and <em>Race_Black</em>. We mutated the gender to a numeric values,
+where male is 0, and female is 1 so that we could interpret the gender
+data more easily.</p>
 <ul>
 <li><p><strong>title</strong>: A categorical variable representing the
 job title of an individual in his/her company. Since we are interested
@@ -459,20 +370,260 @@ predictors.</p></li>
 representing the number of years of an individual’s working experience.
 According to our research question, this is one of our predictors.
 gender: A categorical variable representing the gender of an individual.
-According to our research question, this is one of our predictors.</p>
+According to our research question, this is one of our
+predictors.</p></li>
+<li><p><strong>gender:</strong> A categorical variable representing the
+gender of individual</p></li>
+<li><p><strong>Bachelors_Degree</strong>: A categorical variable
+representing if an individual has a bachelor’s degree.</p></li>
+<li><p><strong>Masters_Degree</strong>: A categorical variable
+representing if an individual has a master’s degree.</p></li>
+<li><p><strong>Doctorate_Degree</strong>: A categorical variable
+representing if an individual has a doctor’s degree.</p></li>
+<li><p><strong>Some_College</strong>: A categorical variable
+representing if an individual has a college’s degree.</p></li>
+<li><p><strong>Highschool</strong>: A categorical variable representing
+if an individual has a high school’s degree.</p></li>
+<li><p><strong>Race_Asian</strong>: A categorical variable representing
+if the race of an individual is Asian.</p></li>
+<li><p><strong>Race_Black</strong>: A categorical variable representing
+if the race of an individual is black.</p></li>
+<li><p><strong>Race_White</strong>: A categorical variable representing
+if the race of an individual is white.</p>
 <div style="page-break-after: always;"></div></li>
 </ul>
-<pre class="r"><code>describe(datascience)</code></pre>
-<pre><code>##                         vars    n      mean        sd    median   trimmed
-## totalyearlycompensation    1 1718 199576.83 106445.38 182500.00 187973.84
-## yearsofexperience          2 1718      4.90      4.09      4.00      4.37
-## yearsatcompany             3 1718      1.99      2.21      1.75      1.62
-## gender*                    4 1718      1.79      0.41      2.00      1.86
-##                              mad   min    max  range  skew kurtosis      se
-## totalyearlycompensation 77836.50 10000 900000 890000  1.57     4.44 2568.12
-## yearsofexperience           2.97     0     30     30  1.58     3.63    0.10
-## yearsatcompany              1.85     0     19     19  2.35     8.57    0.05
-## gender*                     0.00     1      2      1 -1.42     0.02    0.01</code></pre>
+<pre class="r"><code>knitr::kable(describe(datascience), align = &#39;l&#39;, caption = &quot;SUmmary Table for the variables&quot;)</code></pre>
+<table style="width:100%;">
+<caption>SUmmary Table for the variables</caption>
+<colgroup>
+<col width="17%" />
+<col width="3%" />
+<col width="3%" />
+<col width="8%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="6%" />
+<col width="2%" />
+<col width="2%" />
+<col width="4%" />
+<col width="8%" />
+<col width="9%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">vars</th>
+<th align="left">n</th>
+<th align="left">mean</th>
+<th align="left">sd</th>
+<th align="left">median</th>
+<th align="left">trimmed</th>
+<th align="left">mad</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">range</th>
+<th align="left">skew</th>
+<th align="left">kurtosis</th>
+<th align="left">se</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">totalyearlycompensation</td>
+<td align="left">1</td>
+<td align="left">1718</td>
+<td align="left">199.5768335</td>
+<td align="left">106.4453764</td>
+<td align="left">182.50</td>
+<td align="left">187.9738372</td>
+<td align="left">77.83650</td>
+<td align="left">10</td>
+<td align="left">900</td>
+<td align="left">890</td>
+<td align="left">1.5735207</td>
+<td align="left">4.4431619</td>
+<td align="left">2.5681195</td>
+</tr>
+<tr class="even">
+<td align="left">yearsofexperience</td>
+<td align="left">2</td>
+<td align="left">1718</td>
+<td align="left">4.9039581</td>
+<td align="left">4.0889323</td>
+<td align="left">4.00</td>
+<td align="left">4.3655523</td>
+<td align="left">2.96520</td>
+<td align="left">0</td>
+<td align="left">30</td>
+<td align="left">30</td>
+<td align="left">1.5845878</td>
+<td align="left">3.6337717</td>
+<td align="left">0.0986503</td>
+</tr>
+<tr class="odd">
+<td align="left">yearsatcompany</td>
+<td align="left">3</td>
+<td align="left">1718</td>
+<td align="left">1.9875437</td>
+<td align="left">2.2138323</td>
+<td align="left">1.75</td>
+<td align="left">1.6159884</td>
+<td align="left">1.85325</td>
+<td align="left">0</td>
+<td align="left">19</td>
+<td align="left">19</td>
+<td align="left">2.3463805</td>
+<td align="left">8.5670322</td>
+<td align="left">0.0534113</td>
+</tr>
+<tr class="even">
+<td align="left">gender*</td>
+<td align="left">4</td>
+<td align="left">1718</td>
+<td align="left">1.2101281</td>
+<td align="left">0.4075180</td>
+<td align="left">1.00</td>
+<td align="left">1.1380814</td>
+<td align="left">0.00000</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">1.4217935</td>
+<td align="left">0.0215102</td>
+<td align="left">0.0098318</td>
+</tr>
+<tr class="odd">
+<td align="left">Bachelors_Degree</td>
+<td align="left">5</td>
+<td align="left">1718</td>
+<td align="left">0.1344587</td>
+<td align="left">0.3412438</td>
+<td align="left">0.00</td>
+<td align="left">0.0436047</td>
+<td align="left">0.00000</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">2.1411588</td>
+<td align="left">2.5860671</td>
+<td align="left">0.0082329</td>
+</tr>
+<tr class="even">
+<td align="left">Masters_Degree</td>
+<td align="left">6</td>
+<td align="left">1718</td>
+<td align="left">0.4150175</td>
+<td align="left">0.4928685</td>
+<td align="left">0.00</td>
+<td align="left">0.3938953</td>
+<td align="left">0.00000</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0.3446480</td>
+<td align="left">-1.8823124</td>
+<td align="left">0.0118910</td>
+</tr>
+<tr class="odd">
+<td align="left">Doctorate_Degree</td>
+<td align="left">7</td>
+<td align="left">1718</td>
+<td align="left">0.1868452</td>
+<td align="left">0.3899007</td>
+<td align="left">0.00</td>
+<td align="left">0.1090116</td>
+<td align="left">0.00000</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1.6053963</td>
+<td align="left">0.5776345</td>
+<td align="left">0.0094068</td>
+</tr>
+<tr class="even">
+<td align="left">Some_College</td>
+<td align="left">8</td>
+<td align="left">1718</td>
+<td align="left">0.0005821</td>
+<td align="left">0.0241262</td>
+<td align="left">0.00</td>
+<td align="left">0.0000000</td>
+<td align="left">0.00000</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">41.3764131</td>
+<td align="left">1711.0034914</td>
+<td align="left">0.0005821</td>
+</tr>
+<tr class="odd">
+<td align="left">Highschool</td>
+<td align="left">9</td>
+<td align="left">1718</td>
+<td align="left">0.0017462</td>
+<td align="left">0.0417634</td>
+<td align="left">0.00</td>
+<td align="left">0.0000000</td>
+<td align="left">0.00000</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">23.8468914</td>
+<td align="left">567.0042689</td>
+<td align="left">0.0010076</td>
+</tr>
+<tr class="even">
+<td align="left">Race_Asian</td>
+<td align="left">10</td>
+<td align="left">1718</td>
+<td align="left">0.2904540</td>
+<td align="left">0.4541041</td>
+<td align="left">0.00</td>
+<td align="left">0.2383721</td>
+<td align="left">0.00000</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">0.9223613</td>
+<td align="left">-1.1499179</td>
+<td align="left">0.0109558</td>
+</tr>
+<tr class="odd">
+<td align="left">Race_White</td>
+<td align="left">11</td>
+<td align="left">1718</td>
+<td align="left">0.1827707</td>
+<td align="left">0.3865909</td>
+<td align="left">0.00</td>
+<td align="left">0.1039244</td>
+<td align="left">0.00000</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1.6402076</td>
+<td align="left">0.6906841</td>
+<td align="left">0.0093270</td>
+</tr>
+<tr class="even">
+<td align="left">Race_Black</td>
+<td align="left">12</td>
+<td align="left">1718</td>
+<td align="left">0.0075669</td>
+<td align="left">0.0866836</td>
+<td align="left">0.00</td>
+<td align="left">0.0000000</td>
+<td align="left">0.00000</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">11.3550015</td>
+<td align="left">127.0099881</td>
+<td align="left">0.0020913</td>
+</tr>
+</tbody>
+</table>
 <p>As shown, total yearly compensation ranges from 10000 to 900000 which
 is a large interval. And we noticed that the median is slightly lower
 than the mean, implying that the distribution of salary might be
@@ -484,34 +635,13 @@ at company, which may indicates that employees usually have worked in
 different companies. And according to the values of <em>skew</em>, we
 noticed that all of the three numeric variables are right-skewed in
 different level.</p>
-<pre class="r"><code>datascience %&gt;% 
-  ggplot(aes(totalyearlycompensation)) + 
-  geom_histogram(bins = 40, fill = &quot;#F5B7B1&quot;, color = &quot;#EC7063&quot;) +
-  theme_minimal() +
-  labs(title = &quot;total year compensation&quot;, 
-       caption = &quot;Fig. 1 Created by Rui Miao in JSC370, Winter 2022&quot;)</code></pre>
-<p><img src="JSC370_midterm_report_files/figure-html/Distrbutions%20of%20interested%20Variables-1.png" width="672" /></p>
-<pre class="r"><code>datascience %&gt;% 
-  ggplot(aes(yearsatcompany)) + 
-  geom_histogram(bins = 40, fill = &quot;#FFDB6D&quot;, color = &quot;#C4961A&quot;) +
-  theme_minimal() +
-  labs(title = &quot;year at company&quot;, 
-       caption = &quot;Fig. 2 Created by Rui Miao in JSC370, Winter 2022&quot;)</code></pre>
-<p><img src="JSC370_midterm_report_files/figure-html/Distrbutions%20of%20interested%20Variables-2.png" width="672" /></p>
-<pre class="r"><code>datascience %&gt;% 
-  ggplot(aes(yearsofexperience)) + 
-  geom_histogram(bins = 40, fill = &quot;#ABEBC6&quot;, color = &quot;#58D68D&quot;) +
-  theme_minimal() +
-  labs(title = &quot;year of experience&quot;, 
-       caption = &quot;Fig. 3 Created by Rui Miao in JSC370, Winter 2022&quot;)</code></pre>
-<p><img src="JSC370_midterm_report_files/figure-html/Distrbutions%20of%20interested%20Variables-3.png" width="672" /></p>
-<pre class="r"><code>datascience %&gt;% 
-  ggplot(aes(gender)) + 
-  geom_bar(fill = c(&quot;#A3E4D7&quot;, &quot;#FADBD8&quot;), color = c(&quot;#48C9B0&quot;, &quot;#F1948A&quot;)) +
-  theme_minimal() +
-  labs(title = &quot;gender&quot;, 
-       caption = &quot;Fig. 4 Created by Rui Miao in JSC370, Winter 2022&quot;)</code></pre>
-<p><img src="JSC370_midterm_report_files/figure-html/Distrbutions%20of%20interested%20Variables-4.png" width="672" /></p>
+<p>Based on the mean of Bachelor’s degree,there are about 13% of the
+population (excluding the na) that have obtained a bachelor’s degrees,
+while there are about 42% of the population (excluding the na) that have
+obtained a master’s degree, and there are about 19% of the population
+(excluding the na) have obtained a doctor’s degree. Also, Asian are the
+most popular race in this dataset.</p>
+<p><img src="JSC370_midterm_report_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>Figure 1 showing the distribution of salary indicates a left-skewed
 trend with some outliers on the right, which have salaries over
 5<em>105dollars per year. Most values concentrate in the interval
@@ -530,19 +660,35 @@ scientists in our dataset.</p>
 including years of experience and years at the company have similar
 distribution as our response variable, which justifies the use of linear
 regression in the analysis.</p>
-<pre class="r"><code>datascience$genders &lt;-1
-datascience$genders[datascience$gender==&quot;Male&quot;] &lt;- 0
-datascience$genders[datascience$gender==&quot;Female&quot;] &lt;- 1</code></pre>
-<p>We mutated the gender to a numeric values, where male is 0, and
-female is 1 so that we could interpret the gender data more easily.</p>
 </div>
-<div id="c.-analyze-the-data" class="section level2">
-<h2>c. Analyze the data</h2>
-<pre class="r"><code>model &lt;-
-  lm(datascience$totalyearlycompensation ~
-       datascience$yearsatcompany+
-       datascience$yearsofexperience+
-       datascience$gender)</code></pre>
+<div id="c.-variable-selection" class="section level2">
+<h2>c. Variable Selection:</h2>
+<p><br />
+To build a model, the first thing to start with is selecting reasonable
+predictors and responses that could provide an answer to the research
+question. Firstly, a linear model with all possible and reasonable
+variables related to the research question was fitted. Based on this
+model, we calculated the p-values for each predictors, and removed the
+predictors randomly until all the predictors have been checked.<br />
+ANOVA partial F-Test and T-Test were used to evaluate if those
+predictors can be removed.</p>
+<ul>
+<li><p>if the p-value of ANOVA partial F-Test is<br />
+</p>
+<ul>
+<li>&lt; 0.05, use T − T est to make further decision<br />
+</li>
+<li>&gt; 0.05, the predictors should be removed</li>
+</ul></li>
+<li><p>if the p-value of T-Test is<br />
+– &lt; 0.05, the predictors cannot be removed<br />
+– &gt; 0.05, the predictors should be removed</p>
+<p>All the predictors that cannot be removed are the appropriate
+variables to build our model.</p></li>
+</ul>
+</div>
+<div id="d.-analyze-the-data" class="section level2">
+<h2>d. Analyze the data</h2>
 <p>My research question can be answered using a <strong>linear
 regression</strong> model because we expect that there exists a linear
 relationship between our predictors and responses. And each row of our
@@ -553,10 +699,16 @@ response and use the predictors <strong>years of experience
 (</strong><span class="math inline">\(X_1\)</span><strong>)</strong>,
 <strong>years at the company (</strong><span
 class="math inline">\(X_2\)</span><strong>)</strong>, <strong>gender
-(</strong><span class="math inline">\(X_3\)</span><strong>)</strong>
-because we are interested in the annual salary level which is total
-yearly compensation, and we would like to see how years of experience,
-years at company and gender affect the total yearly compensation.</p>
+(</strong><span class="math inline">\(X_3\)</span><strong>),</strong>
+<strong>Bachelors_Degree</strong>(<span
+class="math inline">\(X_4\)</span>),
+<strong>Masters_Degree</strong>(<span
+class="math inline">\(X_5\)</span>),
+<strong>Doctorate_Degree</strong>(<span
+class="math inline">\(X_6\)</span>) because we are interested in the
+annual salary level which is total yearly compensation, and we would
+like to see how years of experience, years at company and gender affect
+the total yearly compensation.</p>
 <p>Some anticipated issues might be that the outliers have some impact
 when estimating the coefficients of our model and need to be removed.
 Another issue is that two of our predictor variables, years of
@@ -570,13 +722,21 @@ our predictor variables will make our prediction less accurate.</p>
 </div>
 <div id="c.-result" class="section level1">
 <h1>C. Result</h1>
-<pre class="r"><code>plot(datascience$totalyearlycompensation 
-     ~ fitted(model), 
-     main=&quot;Y versus Y-hat&quot;, 
-     xlab=&quot;Y-hat&quot;, ylab=&quot;Y&quot;)
-
-abline(a = 0, b = 1)
-lines(lowess(datascience$totalyearlycompensation ~ fitted(model)), lty=2)</code></pre>
+<div id="process-of-obtaining-the-final-model" class="section level3">
+<h3>1. Process of obtaining the final model</h3>
+<p>After removing the variables with insignificant p-values (except
+Genders since we are interested in gender), the <strong>ANOVA</strong>
+partial <strong>F-Test</strong> is in-significant. Thus, all these
+predictors can be removed. For the remaining variables, w checked one by
+one, and for removing every one of them, the values of AN OV A partial
+F-Test is significant, which indicate that all the remaining cannot be
+removed. Then the model is only having predictors
+<em>yearatcompany</em>, <em>yearofexperience</em>, <em>gender, Bachelors
+degree, Masters degree, and Doctorate degree, and response
+totalyearlycompensation</em>.</p>
+</div>
+<div id="goodness-of-the-result" class="section level3">
+<h3>2. Goodness of the result</h3>
 <p><img src="JSC370_midterm_report_files/figure-html/Response%20versus%20fitted%20values-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>The plot above showing the relationship between the response Y and
 the fitted values of Y. By observing the plot of response against the
@@ -585,7 +745,6 @@ identity function, indicating that there is not a simple function of a
 linear combination of predictors. And most of the points in the graph
 are having a positive values. Thus, conditional means response is not a
 perfect single function of a linear combination of the predictors.</p>
-<pre class="r"><code>pairs(datascience[,1:3])</code></pre>
 <p><img src="JSC370_midterm_report_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Based on this plot, we noticed that there is some patterns between
 each pairs of variables. Most of the plots have points concentrating at
@@ -595,25 +754,6 @@ is positive. Only the scatter plot for total yearly compensation and
 years at company seems to have an unclear association. Above this, we
 can conclude that conditional mean of each predictor has a linear
 function with another predictor.</p>
-<pre class="r"><code># make all residual plots
-r &lt;- resid(model)
-
-par(mfrow=c(2,2))
-plot(r ~ fitted(model), 
-     main=&quot;Fitted&quot;, 
-     xlab=&quot;Fitted&quot;, ylab=&quot;res.&quot;)
-
-plot(r ~ datascience$yearsofexperience, 
-     main=&quot;YearOfExperience&quot;, 
-     xlab=&quot;YearOfExperience&quot;, ylab=&quot;res&quot;)
-
-plot(r ~ datascience$yearsatcompany, 
-     main=&quot;YearOfCompany&quot;, 
-     xlab=&quot;YearOfCompany&quot;, ylab=&quot;res&quot;)
-
-plot(r ~ datascience$genders, 
-     main=&quot;Gender&quot;, 
-     xlab=&quot;Gender&quot;, ylab=&quot;res&quot;)</code></pre>
 <p><img src="JSC370_midterm_report_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>We recognized that the scatters does not spread randomly and equally.
 But we noticed that all the points are more equally distributed at both
@@ -623,40 +763,24 @@ assumption 2, 3 still do not hold perfectly, which are the population
 responses (equivalently errors) are somhow correlated with each other,
 and the population errors (equivalently responses) do not have constant
 spread/variance around conditional mean.</p>
-<pre class="r"><code>qqnorm(r)
-qqline(r)</code></pre>
-<p><img src="JSC370_midterm_report_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>By the normal QQ-plot, there is a straight diagonal string of points
 along an identity function, with some deviation on both ends. This shows
 that there is a <strong>normality</strong>, the populations errors are
 normally distributed with the mean of assumption 1.</p>
-<pre class="r"><code>summary(model)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = datascience$totalyearlycompensation ~ datascience$yearsatcompany + 
-##     datascience$yearsofexperience + datascience$gender)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -283202  -60331  -12036   42627  624604 
-## 
-## Coefficients:
-##                               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                   152378.2     5870.0  25.959  &lt; 2e-16 ***
-## datascience$yearsatcompany     -4525.7     1241.3  -3.646 0.000274 ***
-## datascience$yearsofexperience  10520.0      673.2  15.627  &lt; 2e-16 ***
-## datascience$genderMale          5828.6     5876.8   0.992 0.321435    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 99020 on 1714 degrees of freedom
-## Multiple R-squared:  0.1362, Adjusted R-squared:  0.1347 
-## F-statistic: 90.06 on 3 and 1714 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre><code>##                            term   Estimate Std. Error    t value      Pr(&gt;|t|)
+## 1                   (Intercept) 165.033014  5.2529025 31.4174908 1.923442e-171
+## 2 datascience$yearsofexperience  10.415917  0.6497583 16.0304484  5.460427e-54
+## 3    datascience$yearsatcompany  -4.183001  1.1953335 -3.4994428  4.781718e-04
+## 4  datascience$Bachelors_Degree -48.450760  7.6040814 -6.3716783  2.397603e-10
+## 5    datascience$Masters_Degree -22.281666  5.5454344 -4.0180200  6.123390e-05
+## 6  datascience$Doctorate_Degree  41.485401  6.7276924  6.1663642  8.699036e-10
+## 7           datascience$gender1  -1.003891  5.6693093 -0.1770746  8.594707e-01</code></pre>
 <p>This is the summary table of our model. Based on the p-values in the
 table, we noticed that the p-values for <strong>year of
 experience</strong> and <strong>year at company</strong> are extremely
 small, which indicates that these two are two main factors of the salary
 level.</p>
+</div>
 </div>
 <div id="d.-conclusion-and-summary" class="section level1">
 <h1>D. Conclusion and Summary</h1>
@@ -675,7 +799,11 @@ that if you are more experienced, you will earn more.</p>
 longer in a company, they will earn less. This could be caused by some
 extremely outliers in the dataset. Usually, employees will at least stay
 at the same salary level through out the duration of working at the
-companies.</p>
+companies. Another one is that people having a bachelor’s or master’s
+degree earn less than those does not have. All the information of degree
+are recorded by 0 and 1 without NA. Thus, 0 may be the default values
+for the column, which may represents not having that degree or unknown.
+This may influence the result and cause the interesting facts.</p>
 <p>Another funny fact is that female earns more than males. Because from
 many facts of gender inequality in reality, females earn less than males
 at the same positions, with same degree. I think this may show an
@@ -713,8 +841,6 @@ class="uri"><em>https://www.levels.fyi/about/terms.html</em></a></p>
 <p>Copyright &copy; 2022, Rui Miao.</p>
 
 
-</div>
-</div>
 
 </div>
 
@@ -747,35 +873,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

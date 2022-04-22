@@ -2,7 +2,7 @@
 title: "JSC370 Final Project"
 author: "Rui Miao"
 date: '2022-04-14'
-output: 
+output:
   html_document:
     toc: TRUE
     toc_float: TRUE
@@ -10,6 +10,9 @@ output:
 # editor_options: 
 #   markdown: 
 #     wrap: 72
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 # A. Introduction
@@ -75,14 +78,21 @@ sentence in the "License" section).
 
 ## b. Cleaning and Wrangling the Data
 
-```{r setup, warning=FALSE, message=FALSE}
+```{r setup, warning=FALSE, message=FALSE, include = FALSE}
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
 library(psych) 
+library(ggpubr)
+library(rpart)
+library(rpart.plot)
+library(randomForest)
+library(gbm)
+library(xgboost)
+library(data.table)
 ```
 
-```{r import dataset}
+```{r import dataset, include=FALSE}
 Levels_Fyi_Salary_Data <- 
   read.csv(file="Levels_Fyi_Salary_Data.csv", header=T)
 
@@ -94,9 +104,24 @@ datascience <- datascience %>%
 datascience <- datascience[!(datascience$gender=="Other"),]
 
 datascience <-
-  datascience %>% 
-  select(totalyearlycompensation, yearsofexperience, yearsatcompany, gender)
+  datascience %>%
+  select(totalyearlycompensation, 
+         yearsofexperience, 
+         yearsatcompany, 
+         gender, 
+         Bachelors_Degree, 
+         Masters_Degree, 
+         Doctorate_Degree, 
+         Some_College, 
+         Highschool,
+         Race_Asian, 
+         Race_White, 
+         Race_Black)
 
+datascience$totalyearlycompensation <- datascience$totalyearlycompensation/1000
+
+datascience$gender[datascience$gender=="Male"] <- 0
+datascience$gender[datascience$gender=="Female"] <- 1
 ```
 
 There are in total 62642 observations and 29 variables in our original
@@ -105,19 +130,23 @@ observations with Data Scientist as title, observations with missing
 values in gender and "Other" in gender are also filtered out. As one of
 the purposes of our analysis is to explore whether there is gender
 discrimination in salaries. The size of the dataset shrinks to 1718
-observations. We are only interested in exploring 4 of the 29 variables
-including *salary*, *yearatcompany*, *yearsofexperience* and *gender*.
+observations. We are only interested in exploring 12 of the 29 variables
+including *salary*, *yearatcompany*, *yearsofexperience* *gender,
+Bachelors_Degree, Masters_Degree, Doctorate_Degree, Some_College,
+Highschool, Race_Asian, Race_White,* and *Race_Black*. We mutated the
+gender to a numeric values, where male is 0, and female is 1 so that we
+could interpret the gender data more easily.
 
 -   **title**: A categorical variable representing the job title of an
     individual in his/her company. Since we are interested in the titles
     related to our future careers, "title" can give us information about
     specific titles that we are interested in.
 
--   **totalyearlycompensation**: A numerical variable representing the
-    total annual compensation of an individual with title in his/her
-    company. According to our research question, this is our response
-    variable. It will be denoted as salary in the following analysis for
-    simplicity.
+-   **totalyearlycompensation(\*1000)**: A numerical variable
+    representing the total annual compensation of an individual with
+    title in his/her company. According to our research question, this
+    is our response variable. It will be denoted as salary in the
+    following analysis for simplicity.
 
 -   **yearatcompany**: A numerical variable representing the number of
     years that an individual has worked in his/her company. According to
@@ -129,10 +158,37 @@ including *salary*, *yearatcompany*, *yearsofexperience* and *gender*.
     categorical variable representing the gender of an individual.
     According to our research question, this is one of our predictors.
 
+-   **gender:** A categorical variable representing the gender of
+    individual
+
+-   **Bachelors_Degree**: A categorical variable representing if an
+    individual has a bachelor's degree.
+
+-   **Masters_Degree**: A categorical variable representing if an
+    individual has a master's degree.
+
+-   **Doctorate_Degree**: A categorical variable representing if an
+    individual has a doctor's degree.
+
+-   **Some_College**: A categorical variable representing if an
+    individual has a college's degree.
+
+-   **Highschool**: A categorical variable representing if an individual
+    has a high school's degree.
+
+-   **Race_Asian**: A categorical variable representing if the race of
+    an individual is Asian.
+
+-   **Race_Black**: A categorical variable representing if the race of
+    an individual is black.
+
+-   **Race_White**: A categorical variable representing if the race of
+    an individual is white.
+
     \newpage
 
 ```{r Summary of the interested Variables, echo=TRUE}
-describe(datascience)
+knitr::kable(describe(datascience), align = 'l', caption = "SUmmary Table for the variables")
 ```
 
 As shown, total yearly compensation ranges from 10000 to 900000 which is
@@ -148,34 +204,91 @@ different companies. And according to the values of *skew*, we noticed
 that all of the three numeric variables are right-skewed in different
 level.
 
-```{r Distrbutions of interested Variables, fig.height = 3, echo=TRUE}
-datascience %>% 
+Based on the mean of Bachelor's degree,there are about 13% of the
+population (excluding the na) that have obtained a bachelor's degrees,
+while there are about 42% of the population (excluding the na) that have
+obtained a master's degree, and there are about 19% of the population
+(excluding the na) have obtained a doctor's degree. Also, Asian are the
+most popular race in this dataset.
+
+```{r Distrbutions of interested Variables, fig.height=3, include=FALSE}
+p1<- datascience %>% 
   ggplot(aes(totalyearlycompensation)) + 
   geom_histogram(bins = 40, fill = "#F5B7B1", color = "#EC7063") +
   theme_minimal() +
-  labs(title = "total year compensation", 
-       caption = "Fig. 1 Created by Rui Miao in JSC370, Winter 2022")
+  labs(title = "total year compensation")
 
-datascience %>% 
+p2<-datascience %>% 
   ggplot(aes(yearsatcompany)) + 
   geom_histogram(bins = 40, fill = "#FFDB6D", color = "#C4961A") +
   theme_minimal() +
-  labs(title = "year at company", 
-       caption = "Fig. 2 Created by Rui Miao in JSC370, Winter 2022")
+  labs(title = "year at company")
 
-datascience %>% 
+p3<-datascience %>% 
   ggplot(aes(yearsofexperience)) + 
   geom_histogram(bins = 40, fill = "#ABEBC6", color = "#58D68D") +
   theme_minimal() +
-  labs(title = "year of experience", 
-       caption = "Fig. 3 Created by Rui Miao in JSC370, Winter 2022")
+  labs(title = "year of experience")
 
-datascience %>% 
+p4<-datascience %>% 
   ggplot(aes(gender)) + 
   geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
   theme_minimal() +
-  labs(title = "gender", 
-       caption = "Fig. 4 Created by Rui Miao in JSC370, Winter 2022")
+  labs(title = "gender")
+
+p5<-datascience %>% 
+  ggplot(aes(Bachelors_Degree)) + 
+  geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
+  theme_minimal() +
+  labs(title = "Bachelor degree")
+
+p6<-datascience %>% 
+  ggplot(aes(Masters_Degree)) + 
+  geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
+  theme_minimal() +
+  labs(title = "Masters Degree")
+p7<-datascience %>% 
+  ggplot(aes(Doctorate_Degree)) + 
+  geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
+  theme_minimal() +
+  labs(title = "Doctorate Degree")
+p8<-datascience %>% 
+  ggplot(aes(Highschool)) + 
+  geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
+  theme_minimal() +
+  labs(title = "Highschool")
+
+p9<-datascience %>% 
+  ggplot(aes(Some_College)) + 
+  geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
+  theme_minimal() +
+  labs(title = "Some College")
+
+p10<-datascience %>% 
+  ggplot(aes(Race_Asian)) + 
+  geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
+  theme_minimal() +
+  labs(title = "Race Asian")
+
+p11<-datascience %>% 
+  ggplot(aes(Race_Black)) + 
+  geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
+  theme_minimal() +
+  labs(title = "Race Black")
+
+p12<-datascience %>% 
+  ggplot(aes(Race_White)) + 
+  geom_bar(fill = c("#A3E4D7", "#FADBD8"), color = c("#48C9B0", "#F1948A")) +
+  theme_minimal() +
+  labs(title = "Race White")
+```
+
+```{r echo=FALSE, fig.height=10}
+ggarrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12,
+          labels = c(1,2,3,4,5,6,7,8,9,10,11,12),
+          common.legend = TRUE, 
+          legend = "bottom",
+          ncol = 3, nrow = 4)
 ```
 
 Figure 1 showing the distribution of salary indicates a left-skewed
@@ -200,23 +313,40 @@ including years of experience and years at the company have similar
 distribution as our response variable, which justifies the use of linear
 regression in the analysis.
 
-```{r}
-datascience$genders <-1
-datascience$genders[datascience$gender=="Male"] <- 0
-datascience$genders[datascience$gender=="Female"] <- 1
-```
+## c. Variable Selection:
 
-We mutated the gender to a numeric values, where male is 0, and female
-is 1 so that we could interpret the gender data more easily.
+\
+To build a model, the first thing to start with is selecting reasonable
+predictors and responses that could provide an answer to the research
+question. Firstly, a linear model with all possible and reasonable
+variables related to the research question was fitted. Based on this
+model, we calculated the p-values for each predictors, and removed the
+predictors randomly until all the predictors have been checked.\
+ANOVA partial F-Test and T-Test were used to evaluate if those
+predictors can be removed.
 
-## c. Analyze the data
+-   if the p-value of ANOVA partial F-Test is\
 
-```{r build the lm}
-model <-
-  lm(datascience$totalyearlycompensation ~
-       datascience$yearsatcompany+
-       datascience$yearsofexperience+
-       datascience$gender)
+    -   \< 0.05, use T − T est to make further decision\
+    -   \> 0.05, the predictors should be removed
+
+-   if the p-value of T-Test is\
+    -- \< 0.05, the predictors cannot be removed\
+    -- \> 0.05, the predictors should be removed
+
+    All the predictors that cannot be removed are the appropriate
+    variables to build our model.
+
+## d. Analyze the data
+
+```{r build the lm, include=FALSE}
+model <- lm(datascience$totalyearlycompensation ~ 
+              datascience$yearsofexperience+
+              datascience$yearsatcompany+
+              datascience$Bachelors_Degree+
+              datascience$Masters_Degree+
+              datascience$Doctorate_Degree+
+              datascience$gender)
 ```
 
 My research question can be answered using a **linear regression** model
@@ -227,10 +357,12 @@ should be independent to one another.
 
 I will be using **total yearly compensation (Y)** as my response and use
 the predictors **years of experience (**$X_1$**)**, **years at the
-company (**$X_2$**)**, **gender (**$X_3$**)** because we are interested
-in the annual salary level which is total yearly compensation, and we
-would like to see how years of experience, years at company and gender
-affect the total yearly compensation.
+company (**$X_2$**)**, **gender (**$X_3$**),**
+**Bachelors_Degree**($X_4$), **Masters_Degree**($X_5$),
+**Doctorate_Degree**($X_6$) because we are interested in the annual
+salary level which is total yearly compensation, and we would like to
+see how years of experience, years at company and gender affect the
+total yearly compensation.
 
 Some anticipated issues might be that the outliers have some impact when
 estimating the coefficients of our model and need to be removed. Another
@@ -245,7 +377,21 @@ predictor variables will make our prediction less accurate.
 
 # C. Result
 
-```{r Response versus fitted values, fig.height = 5, fig.width=5, fig.align='center'}
+### 1. Process of obtaining the final model
+
+After removing the variables with insignificant p-values (except Genders
+since we are interested in gender), the **ANOVA** partial **F-Test** is
+in-significant. Thus, all these predictors can be removed. For the
+remaining variables, w checked one by one, and for removing every one of
+them, the values of AN OV A partial F-Test is significant, which
+indicate that all the remaining cannot be removed. Then the model is
+only having predictors *yearatcompany*, *yearofexperience*, *gender,
+Bachelors degree, Masters degree, and Doctorate degree, and response
+totalyearlycompensation*.
+
+### 2. Goodness of the result
+
+```{r Response versus fitted values, echo=FALSE, fig.align='center', fig.height=5, fig.width=5}
 plot(datascience$totalyearlycompensation 
      ~ fitted(model), 
      main="Y versus Y-hat", 
@@ -263,7 +409,7 @@ combination of predictors. And most of the points in the graph are
 having a positive values. Thus, conditional means response is not a
 perfect single function of a linear combination of the predictors.
 
-```{r, fig.height = 5}
+```{r echo=FALSE}
 pairs(datascience[,1:3])
 
 ```
@@ -277,11 +423,11 @@ at company seems to have an unclear association. Above this, we can
 conclude that conditional mean of each predictor has a linear function
 with another predictor.
 
-```{r, fig.height = 5}
+```{r echo=FALSE, fig.height=8}
 # make all residual plots
 r <- resid(model)
 
-par(mfrow=c(2,2))
+par(mfrow=c(3,3))
 plot(r ~ fitted(model), 
      main="Fitted", 
      xlab="Fitted", ylab="res.")
@@ -294,9 +440,23 @@ plot(r ~ datascience$yearsatcompany,
      main="YearOfCompany", 
      xlab="YearOfCompany", ylab="res")
 
-plot(r ~ datascience$genders, 
+plot(r ~ datascience$gender, 
      main="Gender", 
      xlab="Gender", ylab="res")
+
+plot(r ~ datascience$Bachelors_Degree, 
+     main="BachelorsDegree", 
+     xlab="BachelorsDegree", ylab="res")
+
+plot(r ~ datascience$Masters_Degree, 
+     main="MastersDegree", 
+     xlab="MastersDegree", ylab="res")
+
+plot(r ~ datascience$Doctorate_Degree, 
+     main="DoctorateDegree", 
+     xlab="DoctorateDegree", ylab="res")
+qqnorm(r)
+qqline(r)
 
 ```
 
@@ -309,18 +469,15 @@ still do not hold perfectly, which are the population responses
 population errors (equivalently responses) do not have constant
 spread/variance around conditional mean.
 
-```{r, fig.height = 5}
-qqnorm(r)
-qqline(r)
-```
-
 By the normal QQ-plot, there is a straight diagonal string of points
 along an identity function, with some deviation on both ends. This shows
 that there is a **normality**, the populations errors are normally
 distributed with the mean of assumption 1.
 
-```{r}
-summary(model)
+```{r echo=FALSE}
+model_df <- data.table(coef(summary(model)), keep.rownames = 'term')
+setDF(model_df)
+model_df
 ```
 
 This is the summary table of our model. Based on the p-values in the
@@ -348,7 +505,11 @@ However, there are some interesting facts that for people works longer
 in a company, they will earn less. This could be caused by some
 extremely outliers in the dataset. Usually, employees will at least stay
 at the same salary level through out the duration of working at the
-companies.
+companies. Another one is that people having a bachelor's or master's
+degree earn less than those does not have. All the information of degree
+are recorded by 0 and 1 without NA. Thus, 0 may be the default values
+for the column, which may represents not having that degree or unknown.
+This may influence the result and cause the interesting facts.
 
 Another funny fact is that female earns more than males. Because from
 many facts of gender inequality in reality, females earn less than males
