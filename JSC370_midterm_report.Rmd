@@ -187,8 +187,8 @@ could interpret the gender data more easily.
 
     \newpage
 
-```{r Summary of the interested Variables, echo=TRUE}
-knitr::kable(describe(datascience), align = 'l', caption = "SUmmary Table for the variables")
+```{r Summary of the interested Variables, echo=FALSE}
+knitr::kable(describe(datascience), align = 'l', caption = "Summary Table for the variables")
 ```
 
 As shown, total yearly compensation ranges from 10000 to 900000 which is
