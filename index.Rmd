@@ -23,7 +23,7 @@ We are using linear regression, regression tree, random forest, bagging, boostin
 
 # Conclusion
 
-The most significant factors that would affect salary are years working at company, years of experience, Gender.
+The most significant factors that would affect salary are years working at company, years of experience, Gender, if obtaining Bachelor’s degree, Master’s Degree, Doctor’s degree.
 
 The relationships between response and each predictors are as follow:
 
@@ -31,7 +31,13 @@ The relationships between response and each predictors are as follow:
 
 -   years of experience: positive
 
--   genders: positive
+-   gender: positive
+
+- if obtaining Bachelor’s degree: negative
+- if obtaining Master’s degree: negative
+- if obtaining Doctor’s degree: positive
+
+
 
 According to the above relationships, we are not surprising to see that if you are more experienced, you will earn more.
 
